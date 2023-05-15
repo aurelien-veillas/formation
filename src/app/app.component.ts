@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -12,17 +12,25 @@ export class AppComponent {
   intervalId: any;
   tache1: string = "1st task to do";
 
-  ngOnInit(): void {
-    this.intervalId = setInterval(() => {
-      this.progress+=1;
-      if (this.progress % 2 == 0 ) {
-        this.tache1 += ".";
-      }
+  constructor(private zone: NgZone) {
+  }
 
-    }, 1000);
+  ngOnInit(): void {
+    this.zone.runOutsideAngular(() => {
+      this.intervalId = setInterval(() => {
+        if (this.progress % 2 == 0 ) {
+          this.zone.run(()=> this.progress++);
+        } else {
+          this.progress++;
+        }
+
+        if (this.progress == 10) this.progress = 0;
+      }, 1000);
+    });
+
   }
 
   ngOnDestroy(): void {
-    this.intervalId.clear();
+    clearInterval(this.intervalId);
   }
 }

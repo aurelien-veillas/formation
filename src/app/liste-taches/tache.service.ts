@@ -21,11 +21,8 @@ export class TacheService {
     ));
   }
 
-  public addTache():Observable<any> {
-    return this.httpClient.post('http://localhost:8100/add', {
-      title: 'tittre tache test 3',
-      description: 'description tache test 3'
-    }).pipe(
+  public addTache(tache: any):Observable<any> {
+    return this.httpClient.post('http://localhost:8100/add', tache).pipe(
       tap(x => console.log("ajout effectué")),
       delay(5000)
     );

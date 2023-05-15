@@ -18,21 +18,24 @@ export class ListeTachesComponent {
   }
 
   ngOnInit(): void {
-    this.tacheService.addTache().subscribe();
+
     this.tacheService.getList().subscribe(t => {
       console.log(t.title)
       this.tableauDeTaches.push(t)
     });
 
-
+    this.tacheService.addTache({title: "titre " + this.progress, description: "desc " + this.progress}).subscribe();
 
     this.zone.runOutsideAngular(() => {
       this.intervalId = setInterval(() => {
         if (this.progress % 2 == 0 ) {
-          this.zone.run(()=> this.progress++);
+          this.zone.run(()=> {
+               this.progress++
+          });
         } else {
           this.progress++;
         }
+
 
         if (this.progress == 10) this.progress = 0;
       }, 1000);
